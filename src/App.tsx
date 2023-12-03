@@ -1,26 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import background from './images/Vase of Flowers.webp'
+import './App.css'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className='App'>
+      <img src={background} className='background-img' alt='flowers' />
+      <header className='header'>
+        <h1 className='title'>JET PHAM</h1>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
