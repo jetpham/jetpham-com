@@ -1,0 +1,34 @@
+.main {
+  width: 100%;
+}
+
+.background-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-size: cover;
+  background-position: center top;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+@font-face {
+  font-family: "36Days";
+  src: url("../public/36Days-Regular.woff2");
+}
+
+.title {
+  z-index: 1;
+  font-family: "36Days";
+  text-align: center;
+  color: #205062;
+  font-size: 18rem;
+  margin-top: calc(16px * 6);
+}
