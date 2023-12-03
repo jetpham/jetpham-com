@@ -1,16 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import background from './images/Vase of Flowers.webp'
+import './App.css'
 
 function App() {
   return (
-    <div className="App">
-      <div className="Image-Container"></div>
-      <header className="App-header">
-        <h1 className="Title-Name">JET PHAM</h1>
-        </header>
+    <div className='App'>
+      <img src={background} className='background-img' alt='flowers' />
+      <header className='header'>
+        <h1 className='title'>JET PHAM</h1>
+      </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
