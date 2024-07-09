@@ -12,7 +12,7 @@ import Head from "next/head";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Home",
+    default: "Jet Pham",
     template: "%s | Jet Pham",
   },
   description: "This is my website.",
