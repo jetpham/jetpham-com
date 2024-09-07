@@ -7,7 +7,7 @@ export default function Page() {
         My Website
       </h1>
       <p className="mb-4">
-        {`I am Jet Pham, a first year computer science student at the University of San Francisco. I am interested rust, linux, robotics, arts & crafts, and food.`}
+        {`I am Jet Pham, a second year computer science student at the University of San Francisco. I am interested rust, linux, robotics, arts & crafts, and food.`}
       </p>
       <div className="my-8">
         <BlogPosts />
