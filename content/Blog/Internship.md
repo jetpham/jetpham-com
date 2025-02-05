@@ -1,7 +1,8 @@
 ---
-title: 'I got an Internship at Hadrian!'
-date: '2024-07-07'
-description: 'For summer 2024 I am working as a robotics intern at Hadrian Automation'
+title: I got an Internship at Hadrian!
+date: 2024-07-07
+description: For summer 2024 I am working as a robotics intern at Hadrian Automation
+tags: []
 ---
 
 This summer I've been interning at the wonderful [Hadrian Automation](https://www.hadrian.co/) as a robotics intern. I learned about the company initially through seeing a youtube video on tech startups. After realizing they were in the Los Angeles, I put them on the list of companies that I'd be interested in interning at. As it was nearing the end of the school year, I finally got in touch with them and started to talk with them about an internship position. [Rick Shanor](https://www.rickshanor.com/) was immensly helpful in the process and eventually gave me a take home assignment. It was a neat project to program a robot in with RoboDK's Python API. I haven't programmed arm robots before and had some interesting problems with the robot colliding with other feaures in the scene. I submitted my work and got some questions about what I could improve on. Some back and forth later, I was offered a position in their Los Angeles Factory 2 as a robotics intern. 
