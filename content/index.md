@@ -3,14 +3,9 @@ title: Jet's Stuff
 date: 2025-02-04
 description: The home page of jetpham.com, a cataloge of jet's stuff
 ---
-
-<!--toc:start-->
-- [Who am I?](#who-am-i)
-<!--toc:end-->
-
-## Who am I?
-
-I am currently a second-year computer science major at the University of San Francisco. I like:
+# Who am I?
+I am currently a second-year computer science major at the University of San Francisco. 
+# Things I like
 - Computers
 - Engineering
 - Art
@@ -21,3 +16,9 @@ I am currently a second-year computer science major at the University of San Fra
 - Racecars
 - Gliders
 - Food
+
+# Socials
+- [Github](https://github.com/jetpham)
+-  [Bluesky](https://bsky.app/profile/jetpham.com)
+- [LinkedIn](https://www.linkedin.com/in/jetpham/)
+- [Leetcode](https://leetcode.com/u/jetpham/)
