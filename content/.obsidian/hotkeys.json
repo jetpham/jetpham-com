@@ -1,0 +1,19 @@
+{
+  "obsidian-languagetool-plugin:ltjump-to-next-suggestion": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "."
+    }
+  ],
+  "obsidian-languagetool-plugin:ltjump-to-previous-suggestion": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "."
+    }
+  ]
+}
