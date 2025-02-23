@@ -1,0 +1,18 @@
+[package]
+name = "jetpham-com"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+color-art = "0.3.9"
+grid = "0.16.1"
+log = "0.4.26"
+ratzilla = "0.0.2"
+wasm-log = "0.3.1"
+wasm-bindgen = "0.2.100"
+fastrand = "2.3.0"
+getrandom = { version = "0.2.15", features = ["js"] }
+
+[build]
+rustflags = ["--cfg", "getrandom_backend=\"wasm_js\""]
+
