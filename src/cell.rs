@@ -10,8 +10,8 @@ impl Cell {
     pub fn from_neighbors(
         &self,
         neighbors: Vec<&Cell>,
-        survival: &Vec<usize>,
-        birth: &Vec<usize>,
+        survival: &[usize],
+        birth: &[usize],
     ) -> Cell {
         let neighbor_count = neighbors
             .iter()
