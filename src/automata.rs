@@ -32,17 +32,17 @@ impl Automata {
         }))
     }
 
-    fn draw(&mut self, draw_row: usize, draw_col: usize) {
-        if let Some(state) = self.grid.get_mut(draw_row, draw_col) {
-            *state = Cell::Alive(random_color());
-            info!("Cell at ({}, {}) toggled", draw_row, draw_col);
-        } else {
-            info!(
-                "Draw missed: coordinates ({}, {}) out of bounds",
-                draw_row, draw_col
-            );
-        }
-    }
+    // fn draw(&mut self, draw_row: usize, draw_col: usize) {
+    //     if let Some(state) = self.grid.get_mut(draw_row, draw_col) {
+    //         *state = Cell::Alive(random_color());
+    //         info!("Cell at ({}, {}) toggled", draw_row, draw_col);
+    //     } else {
+    //         info!(
+    //             "Draw missed: coordinates ({}, {}) out of bounds",
+    //             draw_row, draw_col
+    //         );
+    //     }
+    // }
 
     fn get_neighbors(&self, row: usize, col: usize) -> Vec<&Cell> {
         [
@@ -119,10 +119,6 @@ impl Automata {
             birth,
             survival,
         }
-    }
-
-    fn resize(&mut self) {
-        todo!()
     }
 
     pub fn step(&mut self) {
