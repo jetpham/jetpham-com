@@ -5,7 +5,7 @@ set -euo pipefail
 if ! command -v rustup
 then
   echo "Installing Rustup..."
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y default-host x86_64-unknown-linux-musl
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   source "$HOME/.cargo/env"
   rustup target add x86_64-unknown-linux-musl
 else
