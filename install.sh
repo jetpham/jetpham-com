@@ -15,7 +15,7 @@ if ! command -v trunk
 then
   echo "Installing trunk with binstall..."
   curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-  cargo binstall trunk
+  cargo binstall -y trunk
   echo "Trunk installation complete."
 else
   echo "trunk already installed."
@@ -24,3 +24,4 @@ fi
 # Build project with trunk
 echo "Building project with trunk"
 trunk build
+
