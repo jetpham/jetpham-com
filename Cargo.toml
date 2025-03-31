@@ -9,7 +9,6 @@ grid = "0.16.1"
 log = "0.4.26"
 ratzilla = "0.0.2"
 wasm-log = "0.3.1"
-wasm-bindgen = "0.2.100"
 fastrand = "2.3.0"
 getrandom = { version = "0.2.15", features = ["js"] }
 
