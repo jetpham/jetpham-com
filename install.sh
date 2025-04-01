@@ -5,9 +5,8 @@ set -euo pipefail
 if ! command -v rustup
 then
   echo "Installing Rustup..."
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-host wasm32-unknown-unknown --profile minimal
   source "$HOME/.cargo/env"
-  rustup target add wasm32-unknown-unknown
 else
   echo "Rustup already installed."
 fi
