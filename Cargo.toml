@@ -11,3 +11,4 @@ ratzilla = "0.0.4"
 wasm-log = "0.3.1"
 fastrand = "2.3.0"
 getrandom = { version = "0.2.15", features = ["js"] }
+textwrap = "0.16.2"
