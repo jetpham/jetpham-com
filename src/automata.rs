@@ -1,11 +1,7 @@
 use crate::cell::Cell;
 
-use color_art::Color;
 use grid::Grid;
 use log::info;
-use ratzilla::ratatui::layout::Rect;
-use ratzilla::ratatui::widgets::Widget;
-use ratzilla::ratatui::widgets::canvas::{Canvas, Points};
 use std::fmt::Debug;
 use std::vec::Vec;
 
@@ -16,8 +12,8 @@ pub struct Automata {
     survival: Vec<usize>,
 }
 
-fn random_color() -> Color {
-    Color::from_hsv(fastrand::f64() * 360.0, 1.0, 1.0).unwrap()
+fn random_color() -> color_art::Color {
+    color_art::Color::from_hsv(fastrand::f64() * 360.0, 1.0, 1.0).unwrap()
 }
 
 fn rat_color(color: color_art::Color) -> ratzilla::ratatui::prelude::Color {
@@ -25,11 +21,14 @@ fn rat_color(color: color_art::Color) -> ratzilla::ratatui::prelude::Color {
 }
 
 impl Automata {
-    fn colors<'a>(&'a self) -> Box<dyn Iterator<Item = ((usize, usize), Color)> + 'a> {
-        Box::new(self.grid.indexed_iter().filter_map(|(x, y)| match y {
-            Cell::Alive(color) => Some((x, *color)),
-            Cell::Dead => None,
-        }))
+    pub(crate) fn rat_colors(&self) -> Vec<Option<ratzilla::ratatui::style::Color>> {
+        self.grid
+            .iter()
+            .map(|cell| match cell {
+                Cell::Alive(color) => Some(rat_color(*color)),
+                Cell::Dead => None,
+            })
+            .collect()
     }
 
     // fn draw(&mut self, draw_row: usize, draw_col: usize) {
@@ -72,25 +71,6 @@ impl Automata {
         })
     }
 
-    pub fn life_canvas(&self, area: Rect) -> impl Widget + '_ {
-        let left = 0.0;
-        let right = f64::from(area.width);
-        let bottom = 0.0;
-        let top = f64::from(area.height);
-        Canvas::default()
-            .marker(ratzilla::ratatui::symbols::Marker::Block)
-            .x_bounds([left, right])
-            .y_bounds([bottom, top])
-            .paint(|ctx| {
-                self.colors().for_each(|((row, col), color)| {
-                    ctx.draw(&Points {
-                        coords: &[(col as f64, row as f64)],
-                        color: rat_color(color),
-                    });
-                });
-            })
-    }
-
     pub fn new(width: usize, height: usize, birth: Vec<usize>, survival: Vec<usize>) -> Self {
         let random_grid = Grid::from_vec(
             (0..width * height)
@@ -127,7 +107,7 @@ impl Automata {
 
         new_grid.indexed_iter_mut().for_each(|((row, col), cell)| {
             let neighbors = self.get_neighbors(row, col);
-            *cell = cell.from_neighbors(neighbors, &self.survival, &self.birth);
+            *cell = cell.with_neighbors(neighbors, &self.survival, &self.birth);
         });
         self.grid = new_grid
     }

@@ -7,7 +7,7 @@ pub enum Cell {
 }
 
 impl Cell {
-    pub fn from_neighbors(
+    pub fn with_neighbors(
         &self,
         neighbors: Vec<&Cell>,
         survival: &[usize],
