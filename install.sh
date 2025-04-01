@@ -1,11 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+# fix home issues
+export HOME=/root
+
 # Install Rustup
 if ! command -v rustup
 then
   echo "Installing Rustup..."
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-host wasm32-unknown-unknown --profile minimal
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-host wasm32-unknown-unknown --profile minimal --default-toolchain nightly
   source "$HOME/.cargo/env"
 else
   echo "Rustup already installed."
