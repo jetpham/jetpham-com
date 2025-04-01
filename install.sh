@@ -8,7 +8,7 @@ export HOME=/root
 if ! command -v rustup
 then
   echo "Installing Rustup..."
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y -t wasm32-unknown-unknown --profile minimal --default-toolchain nightly
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y -t wasm32-unknown-unknown --profile minimal
   source "$HOME/.cargo/env"
 else
   echo "Rustup already installed."
