@@ -1,6 +1,6 @@
 This is a [Rust](https://www.rust-lang.org/) project bootstrapped build on [Ratzilla](https://orhun.dev/ratzilla/) and [Ratatui](https://ratatui.rs/)
 
-It has a colorful implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in the background
+A terminal-esque personal page that has a colorful implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) overlaid atop.
 
 ## [Getting Started](https://github.com/orhun/ratzilla#serve)
 
@@ -26,7 +26,7 @@ Now go to [http://localhost:8080](http://localhost:8080) and enjoy TUIs in your 
 
 ## Learn More
 
-To learn more about Rust, Ratzilla and Ratatui, take a look at the following resources:
+To learn more about Rust, Ratzilla, and Ratatui, take a look at the following resources:
 
 - [Rust Programming Language](https://www.rust-lang.org/) - A language empowering everyone to build reliable and efficient software
 - [Ratatui](https://ratatui.rs/) - A Rust crate for cooking up Terminal User Interfaces
