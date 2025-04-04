@@ -3,7 +3,6 @@ use color_art::Color;
 #[derive(Debug, Clone)]
 pub enum Cell {
     Alive(Color),
-    Growing((Color, f64)),
     Dead,
 }
 
@@ -14,14 +13,6 @@ impl Cell {
     #[must_use]
     pub fn is_alive(&self) -> bool {
         matches!(self, Self::Alive(..))
-    }
-
-    /// Returns `true` if the cell is [`Dead`].
-    ///
-    /// [`Dead`]: Cell::Dead
-    #[must_use]
-    pub fn is_dead(&self) -> bool {
-        matches!(self, Self::Dead)
     }
 }
 
@@ -39,12 +30,10 @@ pub fn with_neighbors(window: Vec<&Cell>, survival: &[usize], birth: &[usize]) -
                 Cell::Dead
             }
         }
-        Cell::Growing((color, growth)) => Cell::Growing((*color, growth + 0.1)),
         Cell::Dead => {
             let alive_neighbors: Vec<&Color> = neighbors
                 .filter_map(|cell| match cell {
                     Cell::Alive(color) => Some(color),
-                    Cell::Growing(_) => None,
                     Cell::Dead => None,
                 })
                 .collect();
