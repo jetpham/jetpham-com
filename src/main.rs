@@ -42,7 +42,7 @@ fn main() -> io::Result<()> {
 
     // this code runs on every draw ("frame")
     terminal.draw_web(move |frame| {
-        automata.step();
+        automata.update();
 
         let area = if is_mobile() {
             let vertical = Layout::vertical([Constraint::Percentage(30)]).flex(Flex::Center);
@@ -130,7 +130,7 @@ University of San Francisco - Computer Science
 
 fn render_links(frame: &mut Frame<'_>, links_area: Rect) {
     frame.render_widget(Block::bordered().title("Links".bold()), links_area);
-    for (i, (_, url)) in LINKS.iter().enumerate() {
+    for (i, (_name, url)) in LINKS.iter().enumerate() {
         let link = Hyperlink::new(*url);
         frame.render_widget(
             link,
@@ -145,7 +145,7 @@ fn render_links(frame: &mut Frame<'_>, links_area: Rect) {
 
 fn render_skills(frame: &mut Frame<'_>, meetups_area: Rect) {
     frame.render_widget(
-        Paragraph::new("Making crazy shit").block(Block::bordered().title("Skills".bold())),
+        Paragraph::new("Making crazy stuff").block(Block::bordered().title("Skills".bold())),
         meetups_area,
     );
 }

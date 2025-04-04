@@ -1,16 +1,22 @@
-use crate::cell::Cell;
+use crate::cell::{Cell, with_neighbors};
+use web_time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-use grid::Grid;
 use log::info;
+use ndarray::{self, Array, Array2, Zip};
 use std::fmt::Debug;
 use std::vec::Vec;
 
 #[derive(Debug)]
 pub struct Automata {
-    grid: Grid<Cell>,
+    grid: Array2<Cell>,
     birth: Vec<usize>,
     survival: Vec<usize>,
+    last_tick: Instant,
+    glider_last_tick: Instant,
 }
+
+const TIME_STEP: Duration = Duration::from_millis(100);
+const GLIDER_TIME_STEP: Duration = Duration::from_millis(500);
 
 fn random_color() -> color_art::Color {
     color_art::Color::from_hsv(fastrand::f64() * 360.0, 1.0, 1.0).unwrap()
@@ -31,58 +37,20 @@ impl Automata {
             .collect()
     }
 
-    // fn draw(&mut self, draw_row: usize, draw_col: usize) {
-    //     if let Some(state) = self.grid.get_mut(draw_row, draw_col) {
-    //         *state = Cell::Alive(random_color());
-    //         info!("Cell at ({}, {}) toggled", draw_row, draw_col);
-    //     } else {
-    //         info!(
-    //             "Draw missed: coordinates ({}, {}) out of bounds",
-    //             draw_row, draw_col
-    //         );
-    //     }
-    // }
-
-    fn get_neighbors(&self, row: usize, col: usize) -> Vec<&Cell> {
-        [
-            (-1, -1),
-            (-1, 0),
-            (-1, 1),
-            (0, -1),
-            (0, 1),
-            (1, -1),
-            (1, 0),
-            (1, 1),
-        ]
-        .iter()
-        .fold(Vec::new(), |mut neighbors, (moore_row, moore_col)| {
-            let row = match add_and_cast(row, *moore_row) {
-                Some(row) => row,
-                None => return neighbors,
-            };
-            let col = match add_and_cast(col, *moore_col) {
-                Some(col) => col,
-                None => return neighbors,
-            };
-            if let Some(neighbor) = self.grid.get(row, col) {
-                neighbors.push(neighbor);
-            }
-            neighbors
-        })
-    }
-
     pub fn new(width: usize, height: usize, birth: Vec<usize>, survival: Vec<usize>) -> Self {
-        let random_grid = Grid::from_vec(
-            (0..width * height)
-                .map(|_| -> Cell {
-                    match fastrand::bool() {
-                        true => Cell::Alive(random_color()),
-                        false => Cell::Dead,
-                    }
-                })
-                .collect(),
-            width,
+        fastrand::seed(
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or(Duration::new(1, 0))
+                .as_millis()
+                .try_into()
+                .unwrap_or_default(),
         );
+
+        let random_grid = Array::from_shape_simple_fn((height, width), || match fastrand::bool() {
+            true => Cell::Alive(random_color()),
+            false => Cell::Dead,
+        });
         info!(
             "grid initialized\nsize:({}, {})\nbirth: {:?}\nsurvival: {:?}\ndensity: {}",
             width,
@@ -98,22 +66,123 @@ impl Automata {
             grid: random_grid,
             birth,
             survival,
+            last_tick: Instant::now(),
+            glider_last_tick: Instant::now(),
         }
     }
 
-    pub fn step(&mut self) {
-        let grid = &self.grid;
-        let mut new_grid = grid.clone();
+    fn padded_mirror_grid(&self, pad: usize) -> Array2<Cell> {
+        let (rows, cols) = self.grid.dim();
 
-        new_grid.indexed_iter_mut().for_each(|((row, col), cell)| {
-            let neighbors = self.get_neighbors(row, col);
-            *cell = cell.with_neighbors(neighbors, &self.survival, &self.birth);
-        });
+        Array2::from_shape_fn((rows + 2 * pad, cols + 2 * pad), |(i, j)| {
+            let mirrored_i = if i < pad {
+                pad - i - 1
+            } else if i >= rows + pad {
+                2 * rows + pad - i - 1
+            } else {
+                i - pad
+            };
+
+            let mirrored_j = if j < pad {
+                pad - j - 1
+            } else if j >= cols + pad {
+                2 * cols + pad - j - 1
+            } else {
+                j - pad
+            };
+
+            self.grid[(mirrored_i, mirrored_j)].clone()
+        })
+    }
+
+    pub fn update(&mut self) {
+        if self.last_tick.elapsed() >= TIME_STEP {
+            self.last_tick = Instant::now();
+            self.step();
+        }
+        if self.glider_last_tick.elapsed() >= GLIDER_TIME_STEP {
+            self.glider_last_tick = Instant::now();
+            self.spawn_glider();
+        }
+    }
+
+    fn step(&mut self) {
+        let mut new_grid = self.grid.clone();
+        Zip::from(&mut new_grid)
+            .and(self.padded_mirror_grid(1).windows((3, 3)))
+            .for_each(|new_cell, window| {
+                let window_slice: Vec<&Cell> = window.iter().collect();
+                *new_cell = with_neighbors(window_slice, &self.survival, &self.birth);
+            });
         self.grid = new_grid
     }
-}
 
-fn add_and_cast(a: usize, b: i8) -> Option<usize> {
-    let b_as_isize = b as isize;
-    a.checked_add_signed(b_as_isize)
+    fn spawn_glider(&mut self) {
+        // empty area for a glider to spawn in
+        const GLIDER_AREA: usize = 5;
+        const GLIDER_PATTERNS: [[[bool; 3]; 3]; 4] = [
+            [
+                [false, false, true],
+                [true, false, true],
+                [false, true, true],
+            ],
+            [
+                [false, true, false],
+                [true, false, false],
+                [true, true, true],
+            ],
+            [
+                [true, true, false],
+                [true, false, true],
+                [true, false, false],
+            ],
+            [
+                [true, true, true],
+                [false, false, true],
+                [false, true, false],
+            ],
+        ];
+
+        let (rows, cols) = self.grid.dim();
+
+        // Get all window positions for GLIDER_AREA^2
+        let mut positions: Vec<(usize, usize)> = (0..=rows - GLIDER_AREA)
+            .flat_map(|i| (0..=cols - GLIDER_AREA).map(move |j| (i, j)))
+            .collect();
+
+        fastrand::shuffle(&mut positions);
+
+        for (start_row, start_col) in positions {
+            let is_all_dead = (0..GLIDER_AREA).all(|i| {
+                (0..GLIDER_AREA)
+                    .all(|j| matches!(self.grid[(start_row + i, start_col + j)], Cell::Dead))
+            });
+
+            if is_all_dead {
+                // Choose a random pattern
+                let glider_pattern = &GLIDER_PATTERNS[fastrand::usize(..4)];
+
+                let center_row = start_row + GLIDER_AREA / 2;
+                let center_col = start_col + GLIDER_AREA / 2;
+
+                // Fill center with a random glider orientation
+                (0..3).for_each(|i| {
+                    for j in 0..3 {
+                        if glider_pattern[i][j] {
+                            self.grid[(center_row + i - 1, center_col + j - 1)] =
+                                Cell::Alive(random_color());
+                        }
+                    }
+                });
+
+                info!(
+                    "Glider spawned at center: ({}, {}), with random rotation",
+                    center_row, center_col
+                );
+                return;
+            }
+        }
+
+        info!("No suitable location found for spawning a glider.");
+    }
 }

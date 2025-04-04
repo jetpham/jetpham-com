@@ -5,10 +5,11 @@ edition = "2024"
 
 [dependencies]
 color-art = "0.3.9"
-grid = "0.16.1"
 log = "0.4.26"
-ratzilla = "0.0.4"
+ratzilla = { version = "0.0.5"}
 wasm-log = "0.3.1"
 fastrand = "2.3.0"
 getrandom = { version = "0.2.15", features = ["js"] }
 textwrap = "0.16.2"
+web-time = "1.1.0"
+ndarray = "0.16.1"
