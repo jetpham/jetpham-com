@@ -29,6 +29,7 @@ const LINKS: &[(&str, &str)] = &[
     ("GitHub", "https://github.com/jetpham"),
     ("LinkedIn", "https://www.linkedin.com/in/jetpham/"),
     ("Bluesky", "https://bsky.app/profile/jetpham.com"),
+    ("Resume", "./resume.pdf"),
 ];
 
 fn main() -> io::Result<()> {
@@ -130,8 +131,8 @@ University of San Francisco - Computer Science
 
 fn render_links(frame: &mut Frame<'_>, links_area: Rect) {
     frame.render_widget(Block::bordered().title("Links".bold()), links_area);
-    for (i, (_name, url)) in LINKS.iter().enumerate() {
-        let link = Hyperlink::new(*url);
+    for (i, (name, url)) in LINKS.iter().enumerate() {
+        let link = Hyperlink::new(*name, *url);
         frame.render_widget(
             link,
             // offset to not overlay on the border

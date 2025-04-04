@@ -439,8 +439,6 @@ dependencies = [
 [[package]]
 name = "ratatui"
 version = "0.29.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eabd94c2f37801c20583fc49dd5cd6b0ba68c716787c2dd6ed18571e1e63117b"
 dependencies = [
  "bitflags",
  "cassowary",
@@ -460,10 +458,9 @@ dependencies = [
 [[package]]
 name = "ratzilla"
 version = "0.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c39b90ee07c8c7a45ee8e0a744fa94e8d028dcc16cccdea219705d9863fc151e"
 dependencies = [
  "console_error_panic_hook",
+ "log",
  "ratatui",
  "thiserror 2.0.12",
  "web-sys",
