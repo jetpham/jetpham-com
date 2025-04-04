@@ -32,7 +32,6 @@ impl Automata {
             .iter()
             .map(|cell| match cell {
                 Cell::Alive(color) => Some(rat_color(*color)),
-                Cell::Growing((color, growth)) => Some(rat_color(color.fade_in(*growth))),
                 Cell::Dead => None,
             })
             .collect()
