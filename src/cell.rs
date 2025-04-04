@@ -3,44 +3,55 @@ use color_art::Color;
 #[derive(Debug, Clone)]
 pub enum Cell {
     Alive(Color),
+    Growing((Color, f64)),
     Dead,
 }
 
 impl Cell {
-    pub fn with_neighbors(
-        &self,
-        neighbors: Vec<&Cell>,
-        survival: &[usize],
-        birth: &[usize],
-    ) -> Cell {
-        let neighbor_count = neighbors
-            .iter()
-            .filter(|cell| match cell {
-                Cell::Alive(_) => true,
-                Cell::Dead => false,
-            })
-            .count();
-        match self {
-            Cell::Alive(_) => {
-                if survival.contains(&neighbor_count) {
-                    self.clone()
-                } else {
-                    Cell::Dead
-                }
+    /// Returns `true` if the cell is [`Alive`].
+    ///
+    /// [`Alive`]: Cell::Alive
+    #[must_use]
+    pub fn is_alive(&self) -> bool {
+        matches!(self, Self::Alive(..))
+    }
+
+    /// Returns `true` if the cell is [`Dead`].
+    ///
+    /// [`Dead`]: Cell::Dead
+    #[must_use]
+    pub fn is_dead(&self) -> bool {
+        matches!(self, Self::Dead)
+    }
+}
+
+pub fn with_neighbors(window: Vec<&Cell>, survival: &[usize], birth: &[usize]) -> Cell {
+    let center = window[4];
+    let neighbors = window
+        .iter()
+        .enumerate()
+        .filter_map(|(i, cell)| if i == 4 { None } else { Some(cell) });
+    match center {
+        Cell::Alive(_) => {
+            if survival.contains(&neighbors.filter(|cell| cell.is_alive()).count()) {
+                center.clone()
+            } else {
+                Cell::Dead
             }
-            Cell::Dead => {
-                if birth.contains(&neighbor_count) {
-                    let neighbor_colors: Vec<&Color> = neighbors
-                        .iter()
-                        .filter_map(|cell| match cell {
-                            Cell::Alive(color) => Some(color),
-                            Cell::Dead => None,
-                        })
-                        .collect();
-                    Cell::Alive(mix_colors(neighbor_colors))
-                } else {
-                    self.clone()
-                }
+        }
+        Cell::Growing((color, growth)) => Cell::Growing((*color, growth + 0.1)),
+        Cell::Dead => {
+            let alive_neighbors: Vec<&Color> = neighbors
+                .filter_map(|cell| match cell {
+                    Cell::Alive(color) => Some(color),
+                    Cell::Growing(_) => None,
+                    Cell::Dead => None,
+                })
+                .collect();
+            if birth.contains(&alive_neighbors.len()) {
+                Cell::Alive(mix_colors(alive_neighbors))
+            } else {
+                center.clone()
             }
         }
     }
