@@ -175,10 +175,6 @@ impl Automata {
                     }
                 });
 
-                info!(
-                    "Glider spawned at center: ({}, {}), with random rotation",
-                    center_row, center_col
-                );
                 return;
             }
         }
