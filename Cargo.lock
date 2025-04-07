@@ -439,6 +439,7 @@ dependencies = [
 [[package]]
 name = "ratatui"
 version = "0.29.0"
+source = "git+https://github.com/jetpham/ratatui.git?branch=hyperlink#86ace642f4a96b1a50ef8453110b955b9ce6faa5"
 dependencies = [
  "bitflags",
  "cassowary",
@@ -458,6 +459,7 @@ dependencies = [
 [[package]]
 name = "ratzilla"
 version = "0.0.5"
+source = "git+https://github.com/jetpham/ratzilla.git?branch=aliasable-hyperlinks#9f740e6c651be8972fb4087e2a6824f25276ddee"
 dependencies = [
  "console_error_panic_hook",
  "log",
