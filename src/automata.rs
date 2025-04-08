@@ -181,4 +181,13 @@ impl Automata {
 
         info!("No suitable location found for spawning a glider.");
     }
+
+    pub(crate) fn resize(&mut self, new_width: usize, new_height: usize) {
+        *self = Automata::new(
+            new_width,
+            new_height,
+            self.birth.clone(),
+            self.survival.clone(),
+        );
+    }
 }

@@ -7,10 +7,10 @@ use log::{info, warn};
 use ratzilla::ratatui::Frame;
 use ratzilla::ratatui::layout::{Alignment, Constraint, Flex, Layout, Offset, Rect};
 use ratzilla::ratatui::style::{Color, Style, Stylize};
-use ratzilla::ratatui::text::Line;
+use ratzilla::ratatui::text::{Line, Span};
 use ratzilla::ratatui::widgets::{BorderType, Clear, Paragraph, Wrap};
 use ratzilla::ratatui::{Terminal, widgets::Block};
-use ratzilla::utils::is_mobile;
+use ratzilla::utils::{get_window_size, is_mobile};
 use ratzilla::widgets::Hyperlink;
 use ratzilla::{DomBackend, WebRenderer};
 use std::iter::zip;
@@ -36,13 +36,22 @@ fn main() -> io::Result<()> {
     wasm_log::init(wasm_log::Config::default());
     let backend = DomBackend::new()?;
     let terminal = Terminal::new(backend)?;
-    let size = terminal.size()?;
+    let mut size: MySize<u16> = get_adjusted_window_size();
     // this uses the rules from conway's game of life
     let mut automata = Automata::new(size.width.into(), size.height.into(), vec![3], vec![2, 3]);
     info!("running automata");
 
     // this code runs on every draw ("frame")
     terminal.draw_web(move |frame| {
+        let frame_area = frame.area();
+        let size1 = MySize {
+            width: frame_area.width,
+            height: frame_area.height,
+        };
+        if size1 != size {
+            Automata::resize(&mut automata, size1.width.into(), size1.height.into());
+            size = size1;
+        }
         automata.update();
 
         let area = if is_mobile() {
@@ -88,10 +97,26 @@ fn main() -> io::Result<()> {
             render_skills(frame, meetups_area);
             render_links(frame, links_area);
         }
-
         color_buffer(frame, automata.rat_colors());
     });
     Ok(())
+}
+
+#[derive(PartialEq)]
+struct MySize<T>
+where
+    T: Into<usize>,
+{
+    width: T,
+    height: T,
+}
+
+fn get_adjusted_window_size() -> MySize<u16> {
+    let size = get_window_size();
+    MySize {
+        width: (size.width - 1),
+        height: (size.height - 1),
+    }
 }
 
 fn contains_alpha_numeric_or_symbols(input: &str) -> bool {
@@ -132,7 +157,8 @@ University of San Francisco - Computer Science
 fn render_links(frame: &mut Frame<'_>, links_area: Rect) {
     frame.render_widget(Block::bordered().title("Links".bold()), links_area);
     for (i, (name, url)) in LINKS.iter().enumerate() {
-        let link = Hyperlink::new(*name, *url);
+        let content = Span::raw(*name).underlined();
+        let link = Hyperlink::new(content, *url);
         frame.render_widget(
             link,
             // offset to not overlay on the border
