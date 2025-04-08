@@ -120,9 +120,9 @@ dependencies = [
 
 [[package]]
 name = "deranged"
-version = "0.4.1"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28cfac68e08048ae1883171632c2aef3ebc555621ae56fbccce1cbf22dd7f058"
+checksum = "9c9e6a11ca8224451684bc0d7d5a7adbf8f2fd6887261a1cfc3c0432f9d4068e"
 dependencies = [
  "powerfmt",
 ]
@@ -459,7 +459,7 @@ dependencies = [
 [[package]]
 name = "ratzilla"
 version = "0.0.5"
-source = "git+https://github.com/jetpham/ratzilla.git?branch=aliasable-hyperlinks#9f740e6c651be8972fb4087e2a6824f25276ddee"
+source = "git+https://github.com/jetpham/ratzilla.git?branch=aliasable-hyperlinks#9b6b378d2701809619bd530ac3397cf1380e7534"
 dependencies = [
  "console_error_panic_hook",
  "log",
