@@ -459,7 +459,6 @@ dependencies = [
 [[package]]
 name = "ratzilla"
 version = "0.0.5"
-source = "git+https://github.com/jetpham/ratzilla.git?branch=aliasable-hyperlinks#9f740e6c651be8972fb4087e2a6824f25276ddee"
 dependencies = [
  "console_error_panic_hook",
  "log",

@@ -41,3 +41,6 @@ next-env.d.ts
 
 /target
 /dist
+
+# Obsidian for editing md
+/.obsidian
